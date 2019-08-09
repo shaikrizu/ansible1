@@ -1,0 +1,43 @@
+    
+---
+- hosts: localhost
+  become: yes
+  vars: 
+    packages_install: 
+      - tomcat8-docs
+      - tomcat8-examples
+      - tomcat8-admin
+      
+    tomcat_username: raj
+    tomcat_password: password
+  tasks:
+    - name: update packages & installing java
+      apt:
+        name: openjdk-8-jdk
+        update_cache: yes
+        state: present
+    - name: installing tomcat8
+      apt:
+        name: tomcat8
+        state: present
+      notify:
+        - service restart
+    - name: install packages
+      package:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages_install }}"
+      notify:
+        - service restart
+    - name: copy war file into tomcat8
+      copy:
+        src: */target/*.war
+        dest: /var/lib/tomcat8/webapps
+      notify:
+        - service restart
+
+  handlers:
+    - name: service restart
+      service:
+        name: tomcat8
+        state: restarted
