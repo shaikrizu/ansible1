@@ -1,6 +1,6 @@
     
 ---
-- hosts: localhost
+- hosts: all
   become: yes
   vars: 
     packages_install: 
@@ -31,7 +31,7 @@
         - service restart
     - name: copy war file into tomcat8
       copy:
-        src: */target/*.war
+        src: target/*.war
         dest: /var/lib/tomcat8/webapps
       notify:
         - service restart
