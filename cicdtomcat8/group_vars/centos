@@ -1,9 +1,4 @@
-java: java-1.7.0-openjdk-devel
-packages_install: 
-  - tomcat8-docs
-  - tomcat8-examples
-  - tomcat8-admin
-  
+java: java-1.8.0-openjdk-devel
 tomcat_username: rizu
 tomcat_password: password
 war_location: https://qt-s3-new-testing.s3-us-west-2.amazonaws.com/gameoflife.war
