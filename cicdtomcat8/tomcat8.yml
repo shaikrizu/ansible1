@@ -4,12 +4,15 @@
   tasks:
   - name: update packages
     apt:
+      name: tomcat8
       update_cache: yes
       state: present
+    when: ansible_os_family == "Debian"
   - name: installing java
     package:
       name: "{{ java }}"
       state: present
+    when: ansible_os_family == "CentoS"
     debug:
       msg: installing java on "{{ ansible_os_family }}"
   - name: tomcat8 installing
