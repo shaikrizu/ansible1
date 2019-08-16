@@ -1,0 +1,72 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: update packages
+    apt:
+      update_cache: yes
+      state: present
+  - name: installing java
+    package:
+      name: "{{ java }}"
+      state: present
+    debug:
+      msg: installing java on "{{ ansible_os_family }}"
+  - name: tomcat8 installing
+    package:
+      name: tomcat8
+      state: present
+    debug:
+      msg: installing tomcat8 on "{{ ansible_os_family }}"
+      notfiy:
+      - restart service
+  - name: 
+    package:
+      name: "{{ item }}"
+      state: present
+    loop: "{{ tomcat_packages }}"
+    debug:
+      msg: installing packages on  "{{ ansible_os_family }}"
+  - name:
+    templete:
+    src: templates/tomcat-users.xml.j2
+      dest: /var/lib/tomcat8/conf/tomcat-users.xml
+  - name: copy war file into tomcat
+    get_url:
+      url: "{{ war_location }}"
+      dest: "/var/lib/tomcat8/webapps/{{ war_file_name }}"
+    debug:
+      msg: copying warfile to  "{{ ansible_os_family }}"
+    notfiy:
+        - restart service
+
+  handlers:
+  - name: restart service
+    service:
+      name: tomcat8
+      state: restart
+  debug:
+    msg: service restarting "{{ ansible_os_family }}"
+
+
+# ubuntu
+# sudo apt-get update
+# sudo apt-get install openjdk-8-jdk
+# sudo apt-get install tomcat8 
+# restar service
+# sudo apt-get tomcat8-docs
+# sudo apt-get tomcat8-examples
+# sudo apt-get tomcat8-admin
+# sudo nano /opt/tomcat/conf/tomcat-users.xml
+# tomcat-users.xml enter some data
+# sudo service tomca8 restart
+
+# Centos
+# sudo yum update
+# sudo yum install java-1.7.0-openjdk-devel
+# sudo yum install tomcat8
+# sudo yum install tomcat8-docs
+# sudo yum install  tomcat8-examples
+# sudo yum install tomcat8-admin
+# sudo vi /opt/tomcat/conf/tomcat-users.xml
+# sudo systemctl restart tomcat.service
