@@ -2,17 +2,23 @@
 - hosts: all
   become: yes
   tasks:
-    - name: update packages
+    - name: update
       apt:
         update_cache: yes
+    - debug:
+        msg: updateing packages
     - name: installing java
       package:
         name: openjdk-8-jdk
         state: present
+    - debug:
+        msg: installing java application
     - name: installing tomcat
       package:
         name: tomcat8
         state: present
+    - debug:
+        msg: installing tomcat application
       notify:
       - service-restart
     - name: installing packages
@@ -20,16 +26,22 @@
         name: "{{ item }}"
         state: present
       loop: "{{ installing_packages }}"
+    - debug: 
+        msg: installing tomcat-packages
     - name: copy tomcat-users.xml
       template:
       src: templates/tomcat-users.xml.j2
       dest: /var/lib/tomcat8/conf/tomcat-users.xml
+    - debug: 
+        msg: copying tomcat-users.xml
       notify:
       - service-restart
     - name: depolying war file
       copy:
         src: "{{ war_location }}"
         dest: /var/lib/tomcat8/webapps/
+    - debug:
+        msg: copying war file webapps folder      
   handlers:
     - name: service-restart
       service:
