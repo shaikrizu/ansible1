@@ -1,0 +1,53 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: update packages
+      apt:
+        update_cache: yes
+    - name: installing java
+      package:
+        name: openjdk-8-jdk
+        state: present
+    - name: installing tomcat
+      package:
+        name: tomcat8
+        state: present
+      notify:
+      - service-restart
+    - name: installing packages
+      package: 
+        name: "{{ item }}"
+        state: present
+      loop: "{{ installing_packages }}"
+    - name: copy tomcat-users.xml
+      template:
+      src: templates/tomcat-users.xml.j2
+      dest: /var/lib/tomcat8/conf/tomcat-users.xml
+      notify:
+      - service-restart
+    - name: depolying war file
+      copy:
+        src: "{{ war_location }}"
+        dest: /var/lib/tomcat8/webapps/
+  handlers:
+    - name: service-restart
+      service:
+        name: tomcat8
+        state: restart
+
+      
+
+
+
+# ubuntu
+# sudo apt-get update
+# sudo apt-get install openjdk-8-jdk
+# sudo apt-get install tomcat8 
+# restar service
+# sudo apt-get tomcat8-docs
+# sudo apt-get tomcat8-examples
+# sudo apt-get tomcat8-admin
+# sudo nano /opt/tomcat/conf/tomcat-users.xml
+# tomcat-users.xml enter some data
+# sudo service tomca8 restart

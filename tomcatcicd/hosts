@@ -1,0 +1,9 @@
+172.31.20.26
+packages:
+  - tomcat8-docs
+  - tomcat8-examples
+  - tomcat8-admin
+
+tomcat_username: rizu
+tomcat_password: password
+war_location: /home/ansible/gameoflife-web/target/gameoflife.war
