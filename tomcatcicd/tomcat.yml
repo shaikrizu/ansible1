@@ -38,7 +38,7 @@
       - service-restart
     - name: depolying war file
       copy:
-        src: "{{ war_location }}"
+        src: /home/ansible/game
         dest: /var/lib/tomcat8/webapps/
     - debug:
         msg: copying war file webapps folder      
