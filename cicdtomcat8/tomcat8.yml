@@ -1,3 +1,4 @@
+    
 ---
 - hosts: all
   become: yes
@@ -35,13 +36,14 @@
         src: templates/tomcat-users.xml.j2
         dest: /var/lib/tomcat8/conf/tomcat-users.xml
     - name: copy war file into tomcat
-      get_url:
-        url: "{{ war_location }}"
-        dest: "/var/lib/tomcat8/webapps/{{ war_file_name }}"
+	  copy:
+	    src: /home/ansible/game/*.war
+		dest: /var/lib/tomcat8/webapps
       debug:
         msg: copying warfile to  "{{ ansible_os_family }}"
       notfiy:
         - restart service
+  
   
   handlers:
   - name: restart service
@@ -51,25 +53,3 @@
   debug:
     msg: service restarting "{{ ansible_os_family }}"
 
-
-# ubuntu
-# sudo apt-get update
-# sudo apt-get install openjdk-8-jdk
-# sudo apt-get install tomcat8 
-# restar service
-# sudo apt-get tomcat8-docs
-# sudo apt-get tomcat8-examples
-# sudo apt-get tomcat8-admin
-# sudo nano /opt/tomcat/conf/tomcat-users.xml
-# tomcat-users.xml enter some data
-# sudo service tomca8 restart
-
-# Centos
-# sudo yum update
-# sudo yum install java-1.7.0-openjdk-devel
-# sudo yum install tomcat8
-# sudo yum install tomcat8-docs
-# sudo yum install  tomcat8-examples
-# sudo yum install tomcat8-admin
-# sudo vi /opt/tomcat/conf/tomcat-users.xml
-# sudo systemctl restart tomcat.service
