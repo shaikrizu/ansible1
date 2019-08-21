@@ -25,13 +25,13 @@
       package: 
         name: "{{ item }}"
         state: present
-      loop: "{{ installing_packages }}"
+      loop: "{{ packages }}"
     - debug: 
         msg: installing tomcat-packages
     - name: copy tomcat-users.xml
       template:
-      src: templates/tomcat-users.xml.j2
-      dest: /var/lib/tomcat8/conf/tomcat-users.xml
+        src: templates/tomcat-users.xml.j2
+        dest: /var/lib/tomcat8/conf/tomcat-users.xml
     - debug: 
         msg: copying tomcat-users.xml
       notify:

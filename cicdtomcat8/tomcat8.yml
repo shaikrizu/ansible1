@@ -1,4 +1,3 @@
-    
 ---
 - hosts: all
   become: yes
@@ -52,4 +51,3 @@
       state: restart
   debug:
     msg: service restarting "{{ ansible_os_family }}"
-
